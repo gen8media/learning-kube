@@ -1,0 +1,16 @@
+Name:          pvc-mongo
+Namespace:     ns-mongo
+StorageClass:  manual
+Status:        Pending
+Volume:        
+Labels:        <none>
+Annotations:   <none>
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      
+Access Modes:  
+VolumeMode:    Filesystem
+Used By:       <none>
+Events:
+  Type     Reason              Age                     From                         Message
+  ----     ------              ----                    ----                         -------
+  Warning  ProvisioningFailed  3m35s (x26 over 9m45s)  persistentvolume-controller  storageclass.storage.k8s.io "manual" not found

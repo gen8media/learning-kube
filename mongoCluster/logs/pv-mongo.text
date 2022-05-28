@@ -1,0 +1,25 @@
+Name:              pv-mongo
+Labels:            name-space=ns-mongo
+                   topology.kubernetes.io/region=us-east1
+                   topology.kubernetes.io/zone=us-east1-c
+Annotations:       <none>
+Finalizers:        [kubernetes.io/pv-protection]
+StorageClass:      
+Status:            Available
+Claim:             
+Reclaim Policy:    Retain
+Access Modes:      RWO
+VolumeMode:        Filesystem
+Capacity:          10Gi
+Node Affinity:     
+  Required Terms:  
+    Term 0:        topology.kubernetes.io/region in [us-east1]
+                   topology.kubernetes.io/zone in [us-east1-c]
+Message:           
+Source:
+    Type:       GCEPersistentDisk (a Persistent Disk resource in Google Compute Engine)
+    PDName:     kube-mongo
+    FSType:     ext4
+    Partition:  0
+    ReadOnly:   false
+Events:         <none>

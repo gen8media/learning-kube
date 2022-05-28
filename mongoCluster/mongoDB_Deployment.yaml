@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  namespace: ns-mongo
+  labels:
+    app: mongodb-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-app
+  template:
+    metadata:
+      labels:
+        app: mongodb-app
+    spec:
+      containers:
+        - name: mongodb-con
+          image: mongo:latest
+          volumeMounts:
+            - mountPath: "/data/db"
+              name: mdb-vol #from Volumes -> name (in this file)
+          ports:
+            - containerPort: 27017
+          #            - nodePort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              #              value: 'root'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-un
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              #              value: 'passBoot'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-pw
+      volumes:
+        - name: mdb-vol
+          persistentVolumeClaim:
+            claimName: pvc-mongo # from mongo-pvc.yaml
+
+
+# new file '---' means new file.
+---
+# Services
+
+# Internal Service for MongoDB
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  namespace: ns-mongo
+spec:
+  selector:
+    app: mongodb-app
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+

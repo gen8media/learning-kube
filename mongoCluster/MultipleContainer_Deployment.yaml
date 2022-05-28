@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-app
+  template:
+    metadata:
+      labels:
+        app: mongodb-app
+    spec:
+      containers:
+        - name: mongodb-con
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          #            - nodePort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              #              value: 'root'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-un
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              #              value: 'passBoot'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-pw
+        - name: mongo-express-con
+          image: mongo-express:latest
+          ports:
+            - containerPort: 8081
+          #            - nodePort: 27017
+          env:
+            - name: ME_CONFIG_MONGODB_PORT
+              value: '27017'
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: 'localhost'
+            #            - name: ME_CONFIG_BASICAUTH_USERNAME
+            #              value: 'amitabh'
+            #            - name: ME_CONFIG_BASICAUTH_PASSWORD
+            #              value: 'foo'
+            - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+              value: 'true'
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              #              value: 'root'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-un
+
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              #              value: 'passBoot'
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-root-pw
+
+# new file '---' means new file.
+---
+# Services
+
+  # Internal Service for MongoDB
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb-app
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+---
+  # Express Service for MongoExpress
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-service
+spec:
+  selector:
+    app: mongodb-app
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+
+
+
