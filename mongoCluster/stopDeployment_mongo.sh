@@ -12,8 +12,9 @@ kubectl delete deployment mongoex-deployment
 kubectl delete deployment mongodb-deployment
 kubectl delete service mongo-express-service
 kubectl delete service mongodb-service
-#kubectl delete pvc mongo-pvc.yaml
-#kubectl delete pv mongo-pvc.yaml
+#kubectl delete pvc pvc-mongo
+#kubectl delete pv pv-mongo
+#kubectl delete sc sc-mongo
 kubectl delete configmap mongo-configmap
 kubectl delete secret mongodb-secret
 
