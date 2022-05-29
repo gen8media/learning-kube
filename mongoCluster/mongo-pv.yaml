@@ -8,9 +8,9 @@ spec:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
-  claimRef:
-    namespace: ns-mongo
-    name: pvc-mongo
+#  claimRef:
+#    namespace: ns-mongo
+#    name: pvc-mongo
   gcePersistentDisk:
     pdName: kube-mongo
     fsType: ext4
